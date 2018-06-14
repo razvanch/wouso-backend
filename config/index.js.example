@@ -1,0 +1,15 @@
+module.exports = {
+  express: {
+    port: 5000,
+    host: '0.0.0.0'
+  },
+  winston: {},
+  database: {
+    dialect: 'mysql',
+    host: 'localhost',
+    name: 'wouso',
+    username: 'wouso',
+    password: 'wouso',
+    logging: true
+  }
+}
