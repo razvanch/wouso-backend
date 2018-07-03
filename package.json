@@ -7,12 +7,15 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "cors": "^2.8.4",
     "express": "^4.16.3",
     "http-status": "^1.2.0",
     "lodash": "^4.17.10",
     "mysql2": "^1.5.3",
     "sequelize": "^4.37.10",
-    "winston": "^3.0.0"
+    "winston": "^3.0.0",
+    "wouso-statistics-app": "file:../../wouso-statistics-app",
+    "wouso-test-app": "git+ssh://git@github.com/razvanch/wouso-test-app.git"
   },
   "scripts": {
     "dev": "nodemon --ignore ./test.js --ignore package.json --ignore node_modules --ignore package-lock.json index.js",

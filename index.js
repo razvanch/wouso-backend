@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 
 const config = require('./config')
 const logger = require('./logger')
@@ -6,6 +7,8 @@ const db = require('./db')
 const appsRouter = require('./apps/routes')
 
 const app = express()
+
+app.use(cors(config.cors))
 
 app.use(express.json())
 
