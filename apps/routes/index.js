@@ -10,7 +10,7 @@ const { catchAll } = require('../../utils/routes')
 const db = require('../../db')
 const logger = require('../../logger')
 
-const REPO_REGEX = /.*github.com.(.*)/
+const REPO_REGEX = /.*github\.com\/(.*?)(\.git)?/
 const FILE_REGEX = /file:.*/
 
 const readDependencies = async () =>
@@ -79,7 +79,14 @@ const mountApp = async (name, url) => {
   logger.info(`Mounted '${name}' at '${mountPath}'.`)
 }
 
-router.get('/', catchAll(async (req, res, next) => res.json(await getApps())))
+router.get(
+  '/',
+  catchAll(async (req, res, next) => {
+    const apps = await getApps()
+
+    res.json(Object.keys(apps).map(name => ({ name })))
+  })
+)
 
 router.post(
   '/',
@@ -105,7 +112,7 @@ router.post(
 
     await mountApp(name, url)
 
-    res.message('Successfully added the repository.')
+    res.json({ name })
   })
 )
 
@@ -126,7 +133,6 @@ router.delete(
         layer => layer.handle.coreAppName !== appName
       )
     } catch (err) {
-      console.log(err)
       throw { message: 'Invalid app name.' }
     }
 
