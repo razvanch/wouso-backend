@@ -6,6 +6,7 @@ const logger = require('./logger')
 const db = require('./db')
 const session = require('./session')
 const appsRouter = require('./apps/routes')
+const usersRouter = require('./users/routes')
 
 const app = express()
 
@@ -27,6 +28,8 @@ app.use((req, res, next) => {
 app.use(session)
 
 app.use('/apps', appsRouter)
+
+app.use('/users', usersRouter)
 
 app.get('/', (req, res, next) => {
   res.message('Server is up and running.')
