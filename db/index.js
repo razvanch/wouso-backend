@@ -17,7 +17,7 @@ const db = new Sequelize(
       idle: 10000
     },
     operatorsAliases: false,
-    logging: config.database.logging ? logger.debug : false,
+    logging: config.database.logging ? message => logger.debug(message) : false,
     define: {
       engine: 'INNODB'
     }
