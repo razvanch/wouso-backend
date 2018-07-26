@@ -11,5 +11,13 @@ module.exports = {
     username: 'wouso',
     password: 'wouso',
     logging: true
+  },
+  cors: {
+    origin: '*'
+  },
+  session: {
+    secret: 'wouso',
+    checkExpirationInterval: 15 * 60 * 1000,
+    expiration: 7 * 24 * 60 * 60 * 2000
   }
 }

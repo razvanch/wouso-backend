@@ -4,6 +4,7 @@ const cors = require('cors')
 const config = require('./config')
 const logger = require('./logger')
 const db = require('./db')
+const session = require('./session')
 const appsRouter = require('./apps/routes')
 
 const app = express()
@@ -22,6 +23,8 @@ app.use((req, res, next) => {
 
   next()
 })
+
+app.use(session)
 
 app.use('/apps', appsRouter)
 
