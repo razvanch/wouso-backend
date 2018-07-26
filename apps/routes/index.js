@@ -5,10 +5,12 @@ const exec = util.promisify(require('child_process').exec)
 const readFile = util.promisify(require('fs').readFile)
 const pickBy = require('lodash/pickBy')
 const forOwn = require('lodash/forOwn')
+const onFinished = require('on-finished')
 
 const { catchAll } = require('../../utils/routes')
 const db = require('../../db')
 const logger = require('../../logger')
+const activity = require('../../activity')
 
 const REPO_REGEX = /.*github\.com\/(.*?)(\.git)?/
 const FILE_REGEX = /file:.*/
@@ -65,7 +67,7 @@ const mountApp = async (name, url) => {
         app = app()
       }
 
-      const appRouter = app.install({ db, logger })
+      const appRouter = app.install({ db, logger, activity })
 
       appRouter.coreAppName = name
 
@@ -78,6 +80,18 @@ const mountApp = async (name, url) => {
 
   logger.info(`Mounted '${name}' at '${mountPath}'.`)
 }
+
+router.use((req, res, next) => {
+  onFinished(res, () => {
+    activity.emit('apps:endpointHit', {
+      method: req.method,
+      endpoint: req.originalUrl,
+      statusCode: res.statusCode
+    })
+  })
+
+  next()
+})
 
 router.get(
   '/',
