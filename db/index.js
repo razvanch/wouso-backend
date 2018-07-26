@@ -28,6 +28,11 @@ db
   .authenticate()
   .then(() => {
     logger.info('Database connection has been established successfully.')
+
+    return db.sync()
+  })
+  .then(() => {
+    logger.info('Database synchronized successfully.')
   })
   .catch(err => {
     logger.error(`Unable to connect to the database: ${err.message}`)
