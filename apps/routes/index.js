@@ -12,7 +12,7 @@ const db = require('../../db')
 const logger = require('../../logger')
 const activity = require('../../activity')
 
-const REPO_REGEX = /.*github\.com\/(.*?)(\.git)?/
+const REPO_REGEX = /.*github\.com\/(.*)/
 const FILE_REGEX = /file:.*/
 
 const readDependencies = async () =>
@@ -32,10 +32,12 @@ const urlToPackageName = async url => {
       return resolved(url) === resolved(packageUrl)
     }
 
-    const repoName = url.match(REPO_REGEX)[1]
+    const repoName = url.match(REPO_REGEX)[1].replace('.git', '')
 
     let match = packageUrl.match(REPO_REGEX)
-    match = match && match[1]
+
+    match = match && match[1].replace('.git', '')
+
     return match === repoName
   })
 }
@@ -47,7 +49,7 @@ const getApps = async () =>
   )
 
 const installPackage = async url => {
-  const command = `cd ${__dirname}; npm install ${url}`
+  const command = `cd ${__dirname}; yarn add ${url}`
   logger.debug(`Executing '${command}'.`)
   await exec(command).catch(err => {
     throw { message: 'Invalid repository URL.' }
@@ -150,7 +152,7 @@ router.delete(
       throw { message: 'Invalid app name.' }
     }
 
-    const command = `cd ${__dirname}; npm uninstall ${appName}`
+    const command = `cd ${__dirname}; yarn remove ${appName}`
     logger.debug(`Executing '${command}'.`)
     await exec(command).catch(err => {
       throw { message: 'Unexpected error while uninstalling app.' }
